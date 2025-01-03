@@ -17,45 +17,14 @@ function Contact() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { email, message } = formData;
-
-    if (!email || !message) {
-      alert('Please fill out both the email and message fields.');
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5000/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, message }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Message sent!');
-      } else {
-        alert('Failed to send the message. Please try again.');
-      }
-    } catch (error) {
-      alert('There was an error sending your message.');
-    }
-  };
-
   useEffect(() => {
     // Set up Intersection Observer to trigger animation on scroll
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        setIsVisible(entry.isIntersecting);  // Set visibility when section is in viewport
+        setIsVisible(entry.isIntersecting); // Set visibility when section is in viewport
       },
-      { threshold: 0.5 }  // Trigger when 50% of the section is visible
+      { threshold: 0.5 } // Trigger when 50% of the section is visible
     );
 
     // Observe the contact section for visibility
@@ -79,7 +48,7 @@ function Contact() {
         </div>
 
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="email" className="text-lg font-semibold text-gray-700">Email</label>
