@@ -1,0 +1,39 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: aquamarine;
+  font-size: 1em;
+  letter-spacing: 0.1px;
+  color: black;
+  text-rendering: optimizeLegibility;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.04);
+}
+.chats {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.chat-bubble-container {
+  list-style: none;
+}
+.chat-bubble {
+  max-width: 400px;
+  padding: 15px;
+  margin: 2px;
+  background-color: gray;
+  border-radius: 14px;
+  text-align: left;
+}
+.from-message {
+  background-color: rgb(71, 181, 236);
+  border-bottom-left-radius: 0;
+  position: relative;
+}
+
+.to-message {
+  background-color: rgb(72, 214, 56);
+  border-bottom-right-radius: 0;
+  right: -150px !important;
+  position: relative;
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Chat | Onestop.Ai | Chat Application </title> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.5.2/css/all.min.css" integrity="sha512SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+    <script>try{Typekit.load({async:true});}catch(e){}</script> 
+    <link rel="stylesheet" href="style.css"> 
+</head> 
+<body> 
+    <main> 
+        <div class="container"> 
+            <div class="row justify-content-center"> 
+                <div class="card" style="width: 700px; height: 500px;"> 
+                    <div class="card-header text-center"> 
+                        <span class="float-start" data-bs-toggle="tooltip" data-bs-placement="right" title="Back to Chat" onclick="goBack()"><i class="fa fa-arrow-left"></i></span> 
+                        <span id="email-label"></span> 
+                        <span class="float-end" data-bs-toggle="tooltip" databs-placement="right" title="Logout" onclick="triggerLogout()"><i class="fa fapower-off"></i></span> 
+                    </div> 
+                    <div class="card-body"> 
+                        <div class="chats" id="chatBox"> 
+                            <ul class="chat-bubble-container"> 
+                                <li class="sent"> 
+                                    <p class="chat-bubble from-message">Hi! How are you?</p> 
+                                </li> 
+                                <li class="reply"> 
+                                    <p class="chat-bubble to-message">Hi! I am fine.</p> 
+                                </li> 
+                            </ul> 
+                        </div> 
+                    </div> 
+                    <div class="card-footer"> 
+                        <div class="chat-input"> 
+                            <div class="input-group mb-3"> 
+                                <input type="text" class="chat form-control" placeholder="Write your message"> 
+                                <div class="input-group-append"> 
+                                    <button class="btn btn-primary submit"><i class="fa fa-paper-plane"></i></button> 
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </main> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha3840pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script> 
+    <script> 
+        document.getElementById('email-label').innerHTML="Chatting with <br>"+localStorage.getItem('chat_user_email')+"<br>"; 
+        const tooltipTriggerList = document.querySelectorAll('[data-bstoggle="tooltip"]') 
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl)) 
+ 
+        function triggerLogout(){ 
+            localStorage.removeItem('loggedin_user_id') 
+            localStorage.removeItem('chat_user_id') 
+            localStorage.removeItem('chat_user_email') 
+            window.location.href = "index.html"; 
+        } 
+        function goBack(){ 
+            localStorage.removeItem('chat_user_id') 
+            localStorage.removeItem('chat_user_email') 
+            window.location.href = "start-chat.html"; 
+        } 
+    </script> 
+    <script type="module"> 
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"; 
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; 
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"; 
+         
+        const firebaseConfig = { 
+          apiKey: "AIzaSyBJaZE3hTL9zkazLvubWTsbFhPFjQ4WviI", 
+          authDomain: "chatapp-30b40.firebaseapp.com", 
+          databaseURL: "https://chatapp-30b40-default-rtdb.firebaseio.com", 
+          projectId: "chatapp-30b40", 
+          storageBucket: "chatapp-30b40.appspot.com", 
+          messagingSenderId: "667931270966", 
+          appId: "1:667931270966:web:6b129647c277c1186b9d97", 
+          measurementId: "G-TFHJLFPQE2" 
+        }; 
+         
+        const app = initializeApp(firebaseConfig); 
+        const db = getDatabase(); 
+         
+        $(window).on('keydown' ,function(e){ 
+            if(e.which==13){ 
+                newChat(); 
+                return false; 
+            } 
+        }) 
+ 
+         
+        $(".submit").click(function(){ 
+            newChat(); 
+        }) 
+         
+        function newChat(){ 
+            var chat = $(".chat").val(); 
+            if($.trim(chat) != ""){ 
+                insertChatData(chat) 
+            } 
+        } 
+         
+        function insertChatData(chat){ 
+            push(ref(db,"/chats"),{ 
+                from: localStorage.getItem('loggedin_user_id'), 
+                to: localStorage.getItem('chat_user_id'), 
+                message : chat 
+            }); 
+        } 
+         
+        const chatRef = ref(db, "/chats"); 
+         
+        onValue(chatRef, (snapshot) => { 
+        $(".chats ul").html(""); 
+        snapshot.forEach((childSnapshot) => { 
+            const childData = childSnapshot.val(); 
+            const fromUserId = childData.from; 
+            const toUserId = childData.to; 
+            const message = childData.message; 
+            let messageClass = ""; 
+            let bubbleClass = ""; 
+            if(fromUserId == localStorage.getItem('loggedin_user_id')){ 
+                messageClass = "sent"; 
+                bubbleClass = " from-message"; // Add a space before the class 
+            } else { 
+                messageClass = "reply"; 
+                bubbleClass = " to-message"; // Add a space before the class 
+            } 
+            const chatBubble = '<li class="' + messageClass + '"><p class="chat-bubble' + bubbleClass + '">' + message + '</p></li>'; 
+            $(".chats ul").append(chatBubble); 
+        }); 
+    }); 
+    </script> 
+</body> 
+</html> 

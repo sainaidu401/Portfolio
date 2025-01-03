@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | Onestop.Ai | Chat Application </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="card" style="width: 700px;">
+                    <div class="card-header">Signup</div>
+                    <div class="card-body">
+                        <form id="signupForm">
+                            <div class="form-group row mt-2">
+                                <label for="name" class="col-md-4 text-md-right">Username</label>
+                                <div class="col-md-8">
+                                    <input type="text" id="name" class="form-control" name="name" autofocus placeholder="Enter your Username">
+                                    <span class="text-danger" id="nameErr"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-2">
+                                <label for="email" class="col-md-4 text-md-right">Email</label>
+                                <div class="col-md-8">
+                                    <input type="text" id="email" class="form-control" name="email" placeholder="Enter your Email">
+                                    <span class="text-danger" id="emailErr"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-2">
+                                <label for="password" class="col-md-4 text-md-right">Password</label>
+                                <div class="col-md-8">
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password">
+                                    <span class="text-danger" id="passwordErr"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-2">
+                                <label for="confirm_password" class="col-md-4 text-md-right">Confirm Password</label>
+                                <div class="col-md-8">
+                                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm your password">
+                                    <span class="text-danger" id="confirmPasswordErr"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-2">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-8">
+                                    <button type="button" id="saveUser" class="btn btn-primary">Signup</button>
+                                    <p class="text-black mt-2 mb-2">I already have an account <a href="index.html" style="text-decoration: none;">Login.</a></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="validation.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJaZE3hTL9zkazLvubWTsbFhPFjQ4WviI",
+            authDomain: "chatapp-30b40.firebaseapp.com",
+            databaseURL: "https://chatapp-30b40-default-rtdb.firebaseio.com",
+            projectId: "chatapp-30b40",
+            storageBucket: "chatapp-30b40.appspot.com",
+            messagingSenderId: "667931270966",
+            appId: "1:667931270966:web:6b129647c277c1186b9d97",
+            measurementId: "G-TFHJLFPQE2"
+        };
+        const app = initializeApp(firebaseConfig);
+
+        function saveUserToFirebase() {
+            if (validateSignUpInputCredentials()) {
+                const auth = getAuth(app);
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        const db = getDatabase(app);
+
+                        push(ref(db, 'registered_users'), {
+                            userid: user.uid,
+                            email: user.email
+                        }).then(() => {
+                            alert("User created successfully");
+                            location.href = "index.html";
+                        });
+                    }).catch((error) => {
+                        const errorMessage = error.message;
+                        alert(errorMessage);
+                    });
+            }
+        }
+
+        document.getElementById("saveUser").addEventListener('click', function () {
+            saveUserToFirebase();
+        });
+    </script>
+</body>
+</html>
