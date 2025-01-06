@@ -1,0 +1,13 @@
+/* canvas{
+
+    width:600px !important;
+    height:300px !important;
+  
+  } */
+  .chart-container {
+    width: 100%;          /* Full width within the grid cell */
+    max-width: 500px;     /* You can adjust this as needed */
+    height: 300px;        /* Fixed height for uniformity */
+    margin: 0 auto;       /* Center the chart within each grid cell */
+  }
+  
