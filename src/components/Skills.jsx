@@ -66,9 +66,12 @@ function Skills() {
         }`}
       >
         <h3 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Technical Skills</h3>
-        <div className="grid grid-cols-3 gap-4 px-4"> {/* Adjusted gap for better spacing */}
+        <div className="grid grid-cols-3 gap-4 px-4">
           {technicalSkills.map((skill, index) => (
-            <div key={index} className="card bg-white p-3 shadow-lg rounded-lg text-center">
+            <div
+              key={index}
+              className="card bg-white p-3 shadow-lg rounded-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            >
               <div className={`text-3xl ${skill.color} mb-3`}>{skill.icon}</div>
               <h3 className="text-sm font-semibold text-gray-700">{skill.label}</h3>
             </div>
