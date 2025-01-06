@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://sainaidu401.github.io/<Protfolio>",
   "scripts": {
     "start": "vite",
     "dev": "vite",
