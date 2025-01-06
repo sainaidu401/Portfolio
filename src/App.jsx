@@ -5,7 +5,7 @@ import About from './components/About';
 import Skills from './components/Skills';
 import Resume from './components/Resume';
 import Projects from './components/Projects';
-import Contact from './components/Contact';
+import Contact from './components/Contact.jsx';
 import './index.css'
 function App() {
   return (

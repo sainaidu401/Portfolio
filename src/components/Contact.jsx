@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as dotenv from "dotenv";
 import {
   FaEnvelope,
   FaPhoneAlt,
@@ -29,7 +30,7 @@ function Contact() {
     setResult("Sending...");
 
     const formPayload = new FormData();
-    formPayload.append("access_key", "a9bce620-9964-4b68-ba37-050db3ca8745"); // Replace with your Web3Forms Access Key
+    formPayload.append("access_key", import.meta.env.VITE_WEB3ACCESSKEY); // Replace with your Web3Forms Access Key
     formPayload.append("name", formData.name);
     formPayload.append("email", formData.email);
     formPayload.append("message", formData.message);
@@ -54,7 +55,7 @@ function Contact() {
   };
 
   return (
-    <div className="py-16 flex flex-col items-center">
+    <div id="contact" className="py-16 flex flex-col items-center">
       <div className="max-w-6xl w-full bg-white p-8 rounded-lg shadow-2xl">
         <h2 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
           Get In Touch
